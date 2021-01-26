@@ -1,0 +1,81 @@
+package dockerUtil
+
+import "fmt"
+
+type container struct {
+	cmd      string
+	arg      []string
+	image    string
+	imageCmd string
+}
+
+type option func(*container)
+
+func NewContainer(opts ...option) *container {
+	var c = container{}
+	c.cmd = "docker"
+	for _, opt := range opts {
+		opt(&c)
+	}
+	return &c
+}
+
+func FromImage(image string) option {
+	return func(c *container) {
+		c.image = image
+	}
+}
+
+func ImageRun(cmd string) option {
+	return func(c *container) {
+		c.imageCmd = cmd
+	}
+}
+
+//func RunOn(platform string) option {
+//	return func(c *container) {
+//		c.cmd = platform
+//	}
+//}
+
+func AutoRemove() option {
+	return func(c *container) {
+		c.arg = append(c.arg, "--rm")
+	}
+}
+
+func OpenIO() option {
+	return func(c *container) {
+		c.arg = append(c.arg, "-it")
+	}
+}
+
+func DisableNetWork() option {
+	return func(c *container) {
+		c.arg = append(c.arg, "--network none")
+	}
+}
+
+func WriteBps(kb int32) option { //限制磁盘写入速率
+	return func(c *container) {
+		if kb >= 1 { //最小1kb（不建议）
+			c.arg = append(c.arg, fmt.Sprintf("--device-write-bps /dev/sda:%dkb", kb))
+		}
+	}
+}
+
+func IoPs(ps int32) option { //限制磁盘写入频率
+	return func(c *container) {
+		if ps >= 1 { //最小为1
+			c.arg = append(c.arg, fmt.Sprintf("--device-write-iops /dev/sda:%d", ps))
+		}
+	}
+}
+
+func MemoryLimit(mb int32) option { //内存限制
+	return func(c *container) {
+		if mb >= 4 { //最小为4
+			c.arg = append(c.arg, fmt.Sprintf("-m %dm", mb))
+		}
+	}
+}

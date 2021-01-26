@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>用户登录</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./static/css/mdui.min.css'>
+</head>
+<body class="mdui-theme-primary-indigo mdui-theme-accent-blue" background="https://cdn.jsdelivr.net/gh/soxft/cdn@1.9/urlshorting/background.png">
+    <div class="mdui-container-fluid mdui-valign" style="height: 100vh;">
+        <div class="mdui-col-md-3 mdui-col-sm-12 mdui-center mdui-card" style="border-radius: 10px;">
+            <div class="mdui-tab mdui-tab-full-width mdui-p-a-0" mdui-tab>
+                <a href="#login" class="mdui-ripple">登录</a>
+                <a href="#registry" class="mdui-ripple">注册</a>
+            </div>
+            <div id="login" class="mdui-p-a-2">
+                <div class="mdui-chip">
+                    <span class="mdui-chip-icon"><i class="mdui-icon material-icons mdui-text-color-red">code</i></span>
+                    <span class="mdui-chip-title">SSH登录：www.learnos.online:8022</span>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12">
+                    <i class="mdui-icon material-icons">account_circle</i>
+                    <label class="mdui-textfield-label">用户账号</label>
+                    <input id="username" class="mdui-textfield-input" type="text"/>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label mdui-col-xs-12">
+                    <i class="mdui-icon material-icons">lock</i>
+                    <label class="mdui-textfield-label">登录密码</label>
+                    <input id="password" class="mdui-textfield-input" type="password"/>
+                </div>
+                <div class="mdui-float-right mdui-p-a-2">
+                    <button id="login_btn" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-a700" onclick="login()">登录</button>
+                </div>
+            </div>
+            <div id="registry" class="mdui-p-a-2">
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <i class="mdui-icon material-icons">account_circle</i>
+                    <label class="mdui-textfield-label">登录账号</label>
+                    <input id="r_username" class="mdui-textfield-input" type="text"/>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <i class="mdui-icon material-icons">lock</i>
+                    <label class="mdui-textfield-label">登录密码</label>
+                    <input id="r_password" class="mdui-textfield-input" type="password"/>
+                </div>
+                <div class="mdui-textfield mdui-textfield-floating-label">
+                    <i class="mdui-icon material-icons">lock_outline</i>
+                    <label class="mdui-textfield-label">重复密码</label>
+                    <input id="r_repassword" class="mdui-textfield-input" type="password"/>
+                </div>
+                <div class="mdui-row">
+                    <div class="mdui-col-xs-8">
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <i class="mdui-icon material-icons">phone</i>
+                            <label class="mdui-textfield-label">手机号码</label>
+                            <input id="phone" class="mdui-textfield-input" type="number"/>
+                        </div>
+                    </div>
+                    <div class="mdui-col-xs-4 mdui-p-t-4">
+                        <button id="send" class="mdui-btn mdui-btn-raised mdui-btn-block mdui-color-white" onclick="send()">发送验证</button>
+                    </div>
+                </div>
+                <div class="mdui-row">
+                    <div class="mdui-col-xs-8">
+                        <div class="mdui-textfield mdui-textfield-floating-label">
+                            <i class="mdui-icon material-icons">verified_user</i>
+                            <label class="mdui-textfield-label">验证码</label>
+                            <input id="verifycode" class="mdui-textfield-input" type="text"/>
+                        </div>
+                    </div>
+                    <div class="mdui-col-xs-4 mdui-p-t-4">
+                        <button id="reg_btn" class="mdui-btn mdui-btn-raised mdui-btn-block mdui-color-theme-accent" onclick="register()">注册</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src='./static/js/mdui.min.js'></script>
+<script src='./static/js/net.js?v=0.36'></script>
+<script src='./static/js/login.js?v=0.42'></script>
+</html>

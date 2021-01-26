@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Terminal</title>
+
+
+    <link href="https://cdn.bootcdn.net/ajax/libs/xterm/3.9.2/xterm.min.css" rel="stylesheet" type="text/css"/>
+    <style>
+        html{
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        .terminal {
+            border: #000 solid 0px;
+            font-family: cursive;
+            font-size: 15px;
+        }
+
+        .reverse-video {
+            color: #000;
+            background: #f0f0f0;
+        }
+
+    </style>
+</head>
+<body>
+<div id="terms" style="height: 100%;width: 100%;"></div>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/xterm/3.9.2/xterm.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/xterm/3.9.2/addons/fit/fit.min.js"></script>
+<script type="text/javascript">
+	const socket = new WebSocket("ws://127.0.0.1:8015/proxy/5bab7cdc-2304-46b8-9df2-cb94679c72dc");
+	const term = new Terminal({cols: 180, rows: 50, screenKeys: true, cursorBlink: true, cursorStyle: "block"});
+	term.open(document.getElementById('terms'));
+	window.onresize = function () {
+	    fit.fit(term);
+	};
+	socket.onopen = function () {
+		fit.fit(term);
+		let auth = {
+	            type: "auth",
+	            token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySWQiOjEsIklwIjoiMTI3LjAuMC4xIiwiZXhwIjoxNjEwMjY0NzE5LCJpYXQiOjE2MTAyNTM5MTksImlzcyI6ImFkbWluIiwic3ViIjoidXNlciJ9.tU6yg1fja4z8Pw6cyiE6Avw27rfiCc9L4b_k8jGQfu8",
+	    }
+	    socket.send(JSON.stringify(auth));  //验证权限
+	    //term.write("正在验证\r\n");
+	    //term.toggleFullscreen(true);
+	    fit.fit(term);
+	    term.on('data', function (data) {
+	        let sdata = {
+	            type: "cmd",
+	            data: data,
+	        }
+			//console.log(isUtf8(JSON.stringify(sdata)))
+	        socket.send(str2utf8(JSON.stringify(sdata)));
+	    });
+
+	    term.on('resize', size => {
+	        //console.log('resize', [size.cols, size.rows]);
+	        let sdata = {
+	            type: "resize",
+	            data: size.cols + "," + size.rows,
+	        }
+	        socket.send(JSON.stringify(sdata));
+	    });
+		var reader = new FileReader();
+	    socket.onmessage = function (msg) {
+	        // if (!is_login) {
+	        //     term.clear()
+	        //     create_sftp()
+	        //     is_login = true
+	        // }
+			
+
+			reader.onload = function(event){
+				var content = reader.result;//内容就在这里
+				term.write(content);
+			};
+			reader.readAsText(msg.data);
+	        term.write(msg.data);
+	        //update_path(msg.data)
+	    };
+	    socket.onerror = function (e) {
+	        is_login = false
+	        //layer.msg("链接出错：" + JSON.stringify(e))
+	        console.log(e);
+	    };
+
+	    socket.onclose = function (e) {
+	        is_login = false
+	        //layer.msg("链接断开：" + JSON.stringify(e))
+	        //term.write("连接已断开" + "\r\n");
+	        //term.destroy();
+	    };
+	};
+	function str2utf8(str) {
+	    encoder = new TextEncoder('utf8');
+	    return encoder.encode(str);
+	}
+	function isUtf8(s) {
+		var lastnames = new Array("ä", "å", "æ", "ç", "è", "é");
+		var count=0;
+		for (var i = 0; i < lastnames.length; i++) {
+			count+=s.split(lastnames[i]).length;
+		}
+		if(count>s.length/5){
+			return true;
+		}else{
+			return false;
+		}
+	}
+</script>
+</html>

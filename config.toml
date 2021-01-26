@@ -1,0 +1,33 @@
+[common]
+jwtKey = "ss_jwt_token"          #jwt签发加密秘钥
+
+[webSocket]				    #此配置三个服务需要保护一致
+[webSocket.gateWay]		    #gateway节点的websocket服务端口
+wsPort  = 8015
+[webSocket.container]		#container节点的websocket服务端口
+wsPort  = 8015
+
+[etcd]			#etcd版本：v3，此配置三个服务需保持一致，且需要开启用户认证
+addr = ["192.168.0.106:2379"]
+userName = "root"
+passWord = "123456"
+
+[web]			    #只用于web服务
+runMode = "release"	#debug test release - [Gin框架RunMode]
+webAddr = "127.0.0.1:8011"  #web端口，可反代到80
+sshAddr = "127.0.0.1:8022"   #ssh面板功能连接端口，可反代，但必须是tcp反代，不建议
+
+[gateWay]
+
+[gateWay.aliSms]		#此配置只在gateWay中使用
+accessId  = "-"
+accessKey = "-"
+signName  = "-"  #短信签名
+template  = "-"  #模板代码
+
+[gateWay.mysql]			#此配置只在gateWay中使用
+addr 	 = "127.0.0.1"
+port 	 = 3306
+userName = "root"
+passWord = "root"
+dbName   = "gateway_data"

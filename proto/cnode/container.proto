@@ -1,0 +1,69 @@
+syntax = "proto3";
+package proto.cnode.service;
+
+enum CreateStatus{
+  Loading = 0;
+  PullImage = 1;
+  StartCreate = 2;
+  CreateSuccess = 3;
+  CreateError = 4;
+  Delete = 5;
+}
+
+enum CallType{
+  CreateContainer = 0;
+  GetContainer = 1;
+}
+
+message CreateConfig{
+  string Image = 1;
+  string Cmd = 2;
+  bool NetworkDisabled = 3;
+  string HostName = 4;
+}
+
+message ThrottleDevice {
+  string  Path = 1;
+  uint64  Rate = 2;
+}
+
+message Resources{
+  bool AutoRemove = 1;
+  int64 Memory = 2;
+  int64 KernelMemoryTCP = 5;
+  ThrottleDevice BlkioDeviceReadBps = 3;
+  ThrottleDevice BlkioDeviceWriteBps = 4;
+}
+
+message CallOpt{
+  CallType type = 1;
+  CreateOpt create = 2;
+}
+
+message CreateOpt{
+  CreateConfig config = 1;
+  Resources resources = 2;
+  string Cid = 3;
+  CreateStatus status = 4;
+  uint64 QueueMsgTime = 5;
+  uint64 Uid = 6;
+}
+
+message CreateNotice{
+  string Cid = 1;
+}
+
+message CreateRsp{
+  bool Ack = 1;
+}
+
+message CallRsp{
+  bool Status = 1;
+  string msg = 2;
+  string data = 3;
+}
+
+service Node {
+  rpc Service (CallOpt) returns (CallRsp);
+  rpc CreateMsg(CreateNotice) returns (CreateRsp);
+}

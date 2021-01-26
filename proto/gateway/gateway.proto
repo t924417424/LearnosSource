@@ -1,0 +1,76 @@
+syntax = "proto3";
+package proto.gateway.service;
+//import "proto/cnode/container.proto";
+
+enum CallType{
+  User = 0;
+  Container = 1;
+}
+
+enum CallerType {
+  Register = 0;
+  SendCode = 1;
+  UserLogin = 2;
+  UpdateToken = 3;
+  UserLogout = 4;
+  CreateContainer = 5;
+  GetContainerStatus = 6;
+  DeleteContainer = 7;
+  GetImageList = 8;
+}
+
+message UserOpt {
+  string Username = 1;
+  string Phone = 2;
+  string Password = 3;
+  string Verify = 4;
+  string Token = 5;
+}
+
+message Options {
+  UserOpt User = 1;
+  //proto.cnode.service.CreateOpt Create = 2;
+  ImageInfo Create = 2;
+  string Cid = 3;
+}
+
+message ImageInfo{
+  uint32 ID = 1;
+  string Cid = 2;
+}
+
+message ContainerStatus{
+  string Cid = 1;
+  string NodeId = 2;
+  uint32 Status = 3;
+  string Image = 4;
+  uint64 NetWorkRecord = 5;
+  uint64 NetWorkLimit = 6;
+  string Addr = 7;
+}
+
+message ImageList{
+  uint32 Id = 1;
+  string ImageName = 2;
+  string Logo = 3;
+}
+
+message CallRsp{
+  uint32 code = 1;
+  bool status = 2;
+  string msg = 3;
+  ContainerStatus data = 4;
+  string cid = 5;
+  string token = 6;
+  repeated ImageList imageList = 7;
+}
+
+message Call {
+  CallType Type = 1;
+  CallerType Caller = 2;
+  Options Opt = 3;
+}
+
+service GateWay{
+  rpc Service (Call) returns (CallRsp);
+}

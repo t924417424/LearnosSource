@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>实例控制中心</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='./static/css/mdui.min.css'>
+    <link href="https://cdn.bootcdn.net/ajax/libs/xterm/3.9.2/xterm.min.css" rel="stylesheet" type="text/css"/>
+</head>
+<body class="mdui-theme-primary-indigo mdui-theme-accent-blue mdui-appbar-with-toolbar" background="https://cdn.jsdelivr.net/gh/soxft/cdn@1.9/urlshorting/background.png">
+<header id="appbar">
+    <div class="mdui-appbar mdui-shadow-1 mdui-color-grey-100 mdui-appbar-fixed mdui-appbar-scroll-hide">
+        <div class="mdui-toolbar">
+            <!-- <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#left-drawer'}"><i class="mdui-icon material-icons">menu</i></a> -->
+            <a href="javascript:;" class="mdui-typo-title">实例控制中心</a>
+            <div class="mdui-toolbar-spacer"></div>
+            <div class="mdui-col-sm-10 mdui-col-md-3 mdui-col-lg-3">
+                <div class="mdui-textfield mdui-textfield-expandable mdui-float-right">
+                    <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
+                    <input class="mdui-textfield-input mdui-col-sm-9 mdui-col-md-12 mdui-col-lg-12" type="text" placeholder="Search"/>
+                    <button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
+                </div>
+            </div>
+            <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>-->
+            <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>
+            <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#example-attr'}">
+                <i class="mdui-icon material-icons">more_vert</i>
+            </a>
+            <ul class="mdui-menu mdui-m-t-5" id="example-attr">
+                <li class="mdui-menu-item">
+                    <a href="javascript:;" class="mdui-ripple">修改密码</a>
+                </li>
+                <li class="mdui-divider"></li>
+                <li class="mdui-menu-item">
+                    <a href="javascript:;" class="mdui-ripple">退出登录</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div class="mdui-container-fluid mdui-p-a-1">
+    <div id="list" class="mdui-row-sm-4 mdui-row-md-5 mdui-row-lg-6 mdui-row-xl-7 mdui-grid-list">
+    </div>
+    <div class="mdui-dialog" id="dialog" style="max-width:100%;max-height: 100%;height: 90vh">
+        <div class="mdui-valign mdui-shadow-2" style="background-color: whitesmoke;height: 25px">
+            <div style="width: 100%">
+                <a href="javascript:;" onclick="popWindow.close()">
+                    <i class="mdui-icon material-icons mdui-float-right mdui-p-r-1 mdui-color-red" style="width: 15px;border-radius: 0px">close</i>
+                </a>
+            </div>
+        </div>
+        <div class="mdui-container" style="max-width:100%;width: 100%;height: 75vh;">
+            <div id="terminal" style="width: 100%;height: 100%;"></div>
+        </div>
+        <div class="mdui-shadow-2" style="background-color: whitesmoke;height: 25px">
+            <div style="width: 100%;height: 100%">
+                <div class="mdui-valign" style="height: 100%;width: 100%;">
+                    <a id="containerStatus" class="mdui-float-left mdui-p-l-2">实例状态：正常</a>
+                    <a class="mdui-float-left mdui-p-l-5">网络流量：</a>
+                    <div class="mdui-progress mdui-float-left" style="width: 30%;height: 20%">
+                        <div id="NetWorkLimit" class="mdui-progress-determinate" style="width: 100%;height: 100%"></div>
+                    </div>
+                    <i id="term_up" class="mdui-icon material-icons mdui-float-right mdui-p-l-5" style="width: 15px;border-radius: 0px">arrow_upward</i>
+                    <i id="term_down" class="mdui-icon material-icons mdui-float-right mdui-p-l-1" style="width: 15px;border-radius: 0px">arrow_downward</i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src='./static/js/mdui.min.js'></script>
+<script src='./static/js/net.js?v=0.52'></script>
+<script src='./static/js/image.js?v=0.27'></script>
+<script src='./static/js/console.js?v=0.66'></script>
+<script src="./static/js/xterm.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/xterm/3.9.2/addons/fit/fit.min.js"></script>
+<script src='./static/js/term.js?v=0.55'></script>
+</html>

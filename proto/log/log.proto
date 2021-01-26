@@ -1,0 +1,17 @@
+syntax = "proto3";
+package proto.log;
+
+enum LogType{
+  Info = 0;
+  Warn = 1;
+  Error = 2;
+  Danger = 3;
+  Debug = 4;
+}
+
+message LogMsg{
+  string NodeID = 1;
+  string NodeIP = 2;
+  LogType Level = 3;
+  string content = 4;
+}

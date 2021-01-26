@@ -1,0 +1,12 @@
+package dockerUtil
+
+func (c *container) GetArg() []string {
+	return c.arg
+}
+
+func (c *container) Create() *container {
+	c.arg = append(c.arg, c.image,c.imageCmd,"")
+	copy(c.arg[1:], c.arg[0:])
+	c.arg[0] = "create"
+	return c
+}

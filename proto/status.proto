@@ -1,0 +1,11 @@
+syntax="proto3";
+package server.status;
+message get_status{
+
+}
+message ret_status{
+  uint64 msg = 1;
+}
+service GetStatus{
+  rpc Status (get_status) returns (ret_status);
+}
