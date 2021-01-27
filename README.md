@@ -65,7 +65,7 @@
 				advertise-client-urls: http://0.0.0.0:2379
 				```
 				`etcd --config-file ./etcd.yml		# 运行此命令，使用该配置文件启动etcd`
-	- ####节点编译
+	- #### 节点编译
 		- 首先确保你已安装go语言的编译环境
 		```shell
 		go build Web/WebNode.go
