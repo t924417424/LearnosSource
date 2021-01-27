@@ -73,12 +73,12 @@
 		go build Container/ContainerNode.go
 		```
 	- #### 节点部署
-		- 将修改好的 config.toml 与编译后的各节点可执行文件放置于同一目录启动
+		- 将修改好的 `config.toml` 与编译后的各节点可执行文件放置于同一目录启动
 		- 各节点可部署至单机，亦可以部署至不同服务器
-		- 需要注意的是Container节点所在机器必须先安装docker环境
-		- Web文件夹以及此文件夹下的static和view文件夹需要和WebNode在同一目录
-		- 因 kill -9 pid命令关闭程序无法被程序捕获，故会导致一些容器和注册信息残留
-		建议使用 kill pid 进行程序关闭
+		- 需要注意的是`Container`节点所在机器必须先安装`docker`环境
+		- `Web`文件夹以及此文件夹下的`static`和`view`文件夹需要和WebNode在同一目录
+		- 因 `kill -9 pid` 命令关闭程序无法被程序捕获，故会导致一些容器和注册信息残留
+		建议使用 `kill pid` 进行程序关闭
 		- 容器节点在自身可用内容小于100M的时候会停止读取创建队列消息[Container/readQueue/queue.go#L41](Container/readQueue/queue.go#L41 "queue.go")
 
 ## 镜像相关
