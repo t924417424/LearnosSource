@@ -54,8 +54,8 @@
 				- 新建etcd.yml，并将如下内容放入该文件
 				```yml
 				name: default
-				data-dir: /default.etcd/
-				wal-dir: /member/wal/
+				data-dir: ./default.etcd/
+				wal-dir: ./member/wal/
 				listen-client-urls: http://0.0.0.0:2379
 				advertise-client-urls: http://0.0.0.0:2379
 				```
