@@ -59,7 +59,7 @@
 				listen-client-urls: http://0.0.0.0:2379
 				advertise-client-urls: http://0.0.0.0:2379
 				```
-				`etcd --config_file ./etcd.yml		# 运行此命令，使用该配置文件启动etcd`
+				`etcd --config-file ./etcd.yml		# 运行此命令，使用该配置文件启动etcd`
 	- ####节点编译
 		- 首先确保你已安装go语言的编译环境
 		```shell
@@ -71,6 +71,7 @@
 		将修改好的 config.toml 与编译后的各节点可执行文件放置于同一目录启动
 		各节点可部署至单机，亦可以部署至不同服务器
 		需要注意的是Container节点所在机器必须先安装docker环境
+		Web文件夹以及此文件夹下的static和view文件夹需要和WebNode在同一目录
 
 ## 镜像相关
 - ###如何添加镜像至用户可创建的镜像列表？
