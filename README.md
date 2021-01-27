@@ -1,6 +1,9 @@
 # Learn开源项目简介
 
 [在线体验](https://learnos.online "在线体验")
+
+[部署教程](https://www.bilibili.com/video/BV1MX4y1T72Q/ "部署教程")
+
 - Learnos项目是一个使用Go语言开发，基于GoMicro微服务框架的开源项目
 - 项目的核心功能为在线创建/使用各种环境，可用于学习/测试（Docker实现）
 - 项目使用微服务架构，可水平扩展各个节点
