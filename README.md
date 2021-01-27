@@ -87,7 +87,7 @@
 		- 表：images
 			- `name：镜像名	#需要和docker镜像名保持一致`
 			- `cmd：docker start时需要执行的命令，一般为/bin/bash，目的在于进入可交互终端`
-			- `memoryt: 内存限制相关，0 -> 不限制，单位：bit`
+			- `memory: 内存限制相关，0 -> 不限制，单位：bit`
 			- `net_work_io_limit: 流量限制相关，0 -> 不限制，单位：bit`
 			- `block_io_limit: blockIo限制相关，0 -> 不限制，单位：次，不建议限制`
 			- `logo: 列表显示的logo图片`
