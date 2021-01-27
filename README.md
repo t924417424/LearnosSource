@@ -21,26 +21,26 @@
 ---
 ## 各个节点功能的相关介绍
 
-- ###[WebNode](./Web/WebNode.go "WebNode")
+- ### [WebNode](./Web/WebNode.go "WebNode")
 	- 提供用户web面板
 	- 提供ssh终端登录服务
 	- 提供websocket数据转发
 	- 开放用户http接口与GateWayNode进行数据交互
-- ###[GateWayNode](./GateWay/GateWayNode.go "GateWayNode")
+- ### [GateWayNode](./GateWay/GateWayNode.go "GateWayNode")
 	- 与数据库进行交互
 	- 用户操作相关功能实现
 		- 登录、注册、发送验证码、中间件...
 	- 容器操作相关功能实现
 		- 发送容器创建、获取容器状态、删除等致消息队列中
 	- 转发websocket请求、对websocket进行鉴权等相关操作
-- ###[ContainerNode](./Container/ContainerNode.go "ContainerNode")
+- ### [ContainerNode](./Container/ContainerNode.go "ContainerNode")
 	- 容器相关功能
 		- 创建容器
 		- 容器资源限制
 		- 主动/被动删除容器
 ---
 ## 部署相关
-- ###各节点如何部署？
+- ### 各节点如何部署？
 	- #### etcd
 	    - 因为减少依赖的想法，所以消息队列和缓存功能皆基于etcd实现
 	    - go-micro实现服务注册/发现所用
@@ -75,7 +75,7 @@
 		Web文件夹以及此文件夹下的static和view文件夹需要和WebNode在同一目录
 
 ## 镜像相关
-- ###如何添加镜像至用户可创建的镜像列表？
+- ### 如何添加镜像至用户可创建的镜像列表？
 	- 因时间原因，相关后台并未开发，所以需要对数据库进行操作添加
 		- 表：images
 			- `name：镜像名	#需要和docker镜像名保持一致`
