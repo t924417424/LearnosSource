@@ -88,6 +88,22 @@ func GetCreateMessage(data []byte) *createStatus {
 	return &msg
 }
 
+func NodeGatCreate(addr, nodeId string, cid string, uid uint64) {
+	statusKey := ContainerListPreFix + strconv.Itoa(int(uid)) + "/" + cid
+	msg, err := queue.MClient.Get(statusKey)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	if len(msg) == 0 { //消息未找到（或者已过期的情况），自动删除
+		_ = queue.MClient.Del(statusKey)
+		return
+	}
+	host,_,_ := net.SplitHostPort(addr)
+	msg = GetCreateMessage(msg).updateNodeInfo(host,nodeId).toJson()
+	_ = queue.MClient.SetEx(statusKey, string(msg), 60*10)
+}
+
 func UpdateStatus(cid string, uid uint64, status CStatus) {
 	statusKey := ContainerListPreFix + strconv.Itoa(int(uid)) + "/" + cid
 	msg, err := queue.MClient.Get(statusKey)
@@ -95,18 +111,18 @@ func UpdateStatus(cid string, uid uint64, status CStatus) {
 		log.Println(err.Error())
 		return
 	}
-	if len(msg) == 0{	//消息未找到（或者已过期的情况），自动删除
+	if len(msg) == 0 { //消息未找到（或者已过期的情况），自动删除
 		_ = queue.MClient.Del(statusKey)
 		return
 	}
 	//log.Println(statusKey)
 	msg = GetCreateMessage(msg).updateStatus(status).toJson()
 	if status == OkCreate {
-		_ = queue.MClient.Set(statusKey, string(msg))	//防止容器服务器意外退出导致的无法重新创建
+		_ = queue.MClient.Set(statusKey, string(msg)) //防止容器服务器意外退出导致的无法重新创建
 	} else if status == PullImage || status == StartCreate {
-		_ = queue.MClient.SetEx(statusKey, string(msg),60 * 10)
+		_ = queue.MClient.SetEx(statusKey, string(msg), 60*10)
 	} else {
-		_ = queue.MClient.SetEx(statusKey, string(msg), 15)	//防止频繁创建
+		_ = queue.MClient.SetEx(statusKey, string(msg), 15) //防止频繁创建
 	}
 	_ = nodeStatus.NodeStatus.Send()
 }
@@ -114,6 +130,13 @@ func UpdateStatus(cid string, uid uint64, status CStatus) {
 func (c *createStatus) updateStatus(s CStatus) *createStatus {
 	c.Status = s
 	c.Msg = msg[s]
+	c.Time = time.Now().Unix()
+	return c
+}
+
+func (c *createStatus) updateNodeInfo(addr,nodeId string) *createStatus {
+	c.Addr = addr
+	c.NodeId = nodeId
 	c.Time = time.Now().Unix()
 	return c
 }

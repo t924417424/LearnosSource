@@ -72,8 +72,8 @@ func (c *createInfo) createContainer() (string, error) {
 		return "", errors.New("暂无可用节点")
 	}
 	var mem string
-	var ip string
-	var nodeId string
+	//var ip string
+	//var nodeId string
 	for _, v := range serList {
 		for _, node := range v.Nodes {
 			nid := strings.SplitN(node.Id, "-", 2)[1]
@@ -82,13 +82,13 @@ func (c *createInfo) createContainer() (string, error) {
 				continue
 			}
 			if string(memTmp) > mem {
-				mem = string(memTmp)
-				ip = node.Address
-				nodeId = nid
+				mem = string(memTmp) //选取最多空闲内存的节点信息
+				//ip = node.Address
+				//nodeId = nid
 			}
 		}
 	}
-	if mem < "100" || ip == "" {
+	if mem < "100" { //最多空闲节点的内容小于100M
 		return "", errors.New("所有节点繁忙，请错峰重试！")
 	}
 	db, err := mysql.Get()
@@ -123,7 +123,7 @@ func (c *createInfo) createContainer() (string, error) {
 		return "", errors.New("配置文件创建失败！")
 	}
 
-	CreateMsg, err := create.NewCreateMessage(create.Loading, c.Uid, nodeId, ip, cid, createOpt.Config.Image, imageInfo.NetWorkIoLimit, imageInfo.BlockIoLimit)
+	CreateMsg, err := create.NewCreateMessage(create.Loading, c.Uid, "", "", cid, createOpt.Config.Image, imageInfo.NetWorkIoLimit, imageInfo.BlockIoLimit)
 	if err != nil {
 		return "", errors.New("创建消息索引失败！")
 	}
@@ -161,10 +161,10 @@ func (c *createInfo) getContainerStatus(cid string) (containers *gateway.Contain
 		data, err = queue.MClient.Get(create.ContainerListPreFix + strconv.Itoa(int(c.Uid)) + "/" + cid)
 	} else {
 		n, infos, err := queue.MClient.GetByPreFix(create.ContainerListPreFix + strconv.Itoa(int(c.Uid)) + "/")
-		if n != 0 && err == nil{
+		if n != 0 && err == nil {
 			for _, v := range infos {
 				tmp := create.GetCreateMessage(v).Status
-				if tmp == create.OkCreate{
+				if tmp == create.OkCreate {
 					data = v
 					break
 				}
@@ -186,7 +186,7 @@ func (c *createInfo) getContainerStatus(cid string) (containers *gateway.Contain
 	//	//存入数据库并删除缓存
 	//}
 	if tmp.Uid == c.Uid {
-		containers = &gateway.ContainerStatus{Cid: tmp.Uuid, NodeId: tmp.NodeId, Status: uint32(tmp.Status), Image: tmp.Image, NetWorkRecord: tmp.Network.Record, NetWorkLimit: tmp.Network.Limit,Addr: tmp.Addr}
+		containers = &gateway.ContainerStatus{Cid: tmp.Uuid, NodeId: tmp.NodeId, Status: uint32(tmp.Status), Image: tmp.Image, NetWorkRecord: tmp.Network.Record, NetWorkLimit: tmp.Network.Limit, Addr: tmp.Addr}
 	} else {
 		return nil, status, errors.New("权限认证失败！")
 	}

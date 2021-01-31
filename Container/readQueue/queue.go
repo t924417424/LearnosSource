@@ -38,7 +38,7 @@ func (c *CreateQueue) StartQueueRecv(ctx context.Context) chan error {
 				return
 			default:
 				//先判断一下内存
-				if status2.GetFree() < 100 {	//可用内存小于100M
+				if status2.GetFree() < 100 { //可用内存小于100M
 					time.Sleep(10 * time.Second)
 					continue
 				}
@@ -126,8 +126,9 @@ func updateStatus(cid string, uid uint64, status create2.CStatus) {
 func (c *CreateQueue) createContainer(opt *node.CreateOpt) {
 	c.startWork()
 	defer c.stopWork()
+	create2.NodeGatCreate(c.addr, c.nodeId, opt.Cid, opt.Uid)	//节点那倒创建信息后，更改etcd中的信息
 	updateStatus(opt.Cid, opt.Uid, create2.StartCreate)
-	config, hostConfig, err := inspectOpt(opt)	//生成docker容器配置
+	config, hostConfig, err := inspectOpt(opt)
 	if err != nil {
 		//log.Println(err.Error())
 		updateStatus(opt.Cid, opt.Uid, create2.ErrorCreate)
@@ -180,3 +181,4 @@ func (c *CreateQueue) ClearQueue() {
 	//	}
 	//}
 }
+
