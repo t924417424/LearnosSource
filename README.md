@@ -4,13 +4,12 @@
 
 [部署教程](https://www.bilibili.com/video/BV1MX4y1T72Q/ "部署教程")
 
-<<<<<<< HEAD
-- 修复GateWay网关自动选择节点造成的容器节点扩容无效
-- 因微服务框架原因，您的所有节点需在同一局域网，否则无法调用（这是我个人开发时候的疏忽，会尽快加入支持分布式部署的更新！）
-- Learnos项目是一个使用Go语言开发，基于GoMicro微服务框架的开源项目
-=======
-- Learnos项目是一个使用Go语言开发，微服务架构的开源项目
->>>>>>> f77170c9b5a4a59acfdfbbd28a0110a6b5d1b25c
+### 更新记录
+- 2020/1/31 修复GateWay选择器逻辑造成的无法正确选取Container节点的问题，增加 公/私网 部署模式配置
+
+---
+
+- LearnOS项目是一个使用Go语言开发，微服务架构的开源项目
 - 项目的核心功能为在线创建/使用各种环境，可用于学习/测试（Docker实现）
 - 项目使用微服务架构开发，可水平扩展各个节点
 - 请勿将本项目用于商业用途，否则所造成的一切损失请自行承担
@@ -109,6 +108,7 @@
 ```toml
 [common]
 jwtKey = "ss_jwt_token"          #jwt签发加密秘钥
+PublicNetWorkMode = false		#是否开启公网模式 true|false 说明：false:只可以部署在局域网  true:只可以部署在公网
 
 [webSocket]				    #此配置三个服务需要保护一致
 [webSocket.gateWay]		    #gateway节点的websocket服务端口

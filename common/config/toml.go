@@ -7,6 +7,7 @@ import (
 type conf struct {
 	Common struct {
 		JwtKey string `toml:"jwtKey"`
+		PublicNetWorkMode bool   `toml:"PublicNetWorkMode"`
 	} `toml:"common"`
 	WebSocket struct {
 		GateWay struct {

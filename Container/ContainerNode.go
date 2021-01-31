@@ -9,11 +9,14 @@ import (
 	"Learnos/Container/websocket"
 	"Learnos/common/config"
 	"Learnos/common/queue/node/status"
+	"Learnos/common/util"
 	node "Learnos/proto/cnode"
 	"context"
+	"fmt"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-micro/registry"
 	"github.com/micro/go-micro/registry/etcd"
+	"github.com/micro/go-micro/server"
 	"github.com/micro/go-micro/transport"
 	"log"
 	"time"
@@ -25,6 +28,7 @@ var statusCancel context.CancelFunc
 var queueCtx context.Context
 var queueCancel context.CancelFunc
 var queue *readQueue.CreateQueue
+var publicIp string
 
 func init() {
 	err := config.ReadConf("config.toml")
@@ -34,12 +38,16 @@ func init() {
 }
 
 func main() {
-	//log.SetFlags(log.Lshortfile)
+	port, err := util.GetPort()
+	if err != nil {
+		panic(err.Error())
+	}
 	conf := config.GetConf()
 	reg := etcd.NewRegistry(registry.Addrs(conf.Etcd.Addr...), etcd.Auth(conf.Etcd.UserName, conf.Etcd.PassWord))
 	service = micro.NewService(
 		micro.Name("micro.service.container.node"),
 		micro.Registry(reg),
+		micro.Address(fmt.Sprintf("0.0.0.0:%d", port)),
 		micro.RegisterTTL(time.Second*30),
 		micro.RegisterInterval(time.Second*15), //超时重新注册
 		micro.AfterStart(afterStart),
@@ -50,7 +58,13 @@ func main() {
 			),
 		),
 	)
-	err := node.RegisterNodeHandler(service.Server(), handler.Handler{})
+	//公网部署模式
+	if conf.Common.PublicNetWorkMode {
+		publicIp = fmt.Sprintf("%s:%d", util.GetPubicIP(), port)
+		service.Server().Init(server.Advertise(publicIp)) //将节点公网信息注册到服务中心
+	}
+
+	err = node.RegisterNodeHandler(service.Server(), handler.Handler{})
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -60,9 +74,13 @@ func main() {
 }
 
 func afterStart() error {
+	conf := config.GetConf()
 	go websocket.Run()
+	if !conf.Common.PublicNetWorkMode {
+		publicIp = service.Server().Options().Advertise
+	}
 	statusCtx, statusCancel = context.WithCancel(context.TODO())
-	nodeStatus.NodeStatus = status.NewNodeStatus(service.Server().Options().Id, service.Server().Options().Advertise, statusCtx)
+	nodeStatus.NodeStatus = status.NewNodeStatus(service.Server().Options().Id, publicIp, statusCtx)
 	go func(ctx context.Context) {
 		select {
 		case <-nodeStatus.NodeStatus.KeepExists():
@@ -79,7 +97,7 @@ func afterStart() error {
 	 * 消息投递方式2：节点主动从自身维护的消息队列读取
 	 */
 	queueCtx, queueCancel = context.WithCancel(context.Background())
-	queue = readQueue.NewCreateQueue(service.Server().Options().Id, service.Server().Options().Advertise)
+	queue = readQueue.NewCreateQueue(service.Server().Options().Id, publicIp)
 	go func(ctx context.Context) {
 		for {
 			select {
@@ -100,10 +118,10 @@ func afterStart() error {
 }
 
 func stopContainer() error {
-	statusCancel()                        //停止程序，取消自动续约
-	queueCancel()                         //结束自动创建
+	statusCancel()                     //停止程序，取消自动续约
+	queueCancel()                      //结束自动创建
 	_ = nodeStatus.NodeStatus.Delete() //停止程序，自动删除内存上报
-	queue.ClearQueue()   //停止程序自动删除该节点维护的队列
-	dockerControl.Exit() //停止所有程序创建的容器，并删除状态缓存消息
+	queue.ClearQueue()                 //停止程序自动删除该节点维护的队列
+	dockerControl.Exit()               //停止所有程序创建的容器，并删除状态缓存消息
 	return nil
 }
