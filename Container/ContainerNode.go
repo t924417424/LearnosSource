@@ -38,6 +38,7 @@ func init() {
 }
 
 func main() {
+	log.SetFlags(log.Lshortfile)
 	port, err := util.GetPort()
 	if err != nil {
 		panic(err.Error())

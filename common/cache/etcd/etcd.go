@@ -27,6 +27,7 @@ func NewCache(opt ...option) (client cache.Cache, err error) {
 	config.Username = conf.Username
 	config.Password = conf.Password
 	config.DialTimeout = conf.DialTimeout
+	config.DialKeepAliveTime = time.Second * 10
 	cli, err := clientv3.New(config)
 	if err != nil {
 		return nil, err
@@ -49,16 +50,16 @@ func (e etcd) UnLock() error {
 }
 
 func (e etcd) Set(key string, value string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	_, err := e.client.Put(ctx, key, value)
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	_, err := e.client.Put(context.Background(), key, value)
 	return err
 }
 
 func (e etcd) Get(key string) ([]byte, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	v, err := e.client.Get(ctx, key)
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	v, err := e.client.Get(context.Background(), key)
 	if err != nil {
 		return nil, err
 	}
@@ -69,9 +70,9 @@ func (e etcd) Get(key string) ([]byte, error) {
 }
 
 func (e etcd) GetByPreFix(prefix string) (int, map[string][]byte, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	v, err := e.client.Get(ctx, prefix, clientv3.WithPrefix())
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	v, err := e.client.Get(context.Background(), prefix, clientv3.WithPrefix())
 	var result = make(map[string][]byte)
 	if err != nil {
 		return 0, result, err
@@ -86,9 +87,9 @@ func (e etcd) GetByPreFix(prefix string) (int, map[string][]byte, error) {
 }
 
 func (e etcd) Exists(key string) (bool, []byte) {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	v, err := e.client.Get(ctx, key, clientv3.WithPrefix())
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	v, err := e.client.Get(context.Background(), key, clientv3.WithPrefix())
 	if err != nil {
 		return false, []byte{}
 	}
@@ -99,22 +100,22 @@ func (e etcd) Exists(key string) (bool, []byte) {
 }
 
 func (e etcd) SetEx(key string, value string, second int64) error {
-	ctx1, cancel1 := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel1()
-	lease, err := e.client.Grant(ctx1, second)
+	//ctx1, cancel1 := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel1()
+	lease, err := e.client.Grant(context.Background(), second)
 	if err != nil {
 		return err
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	_, err = e.client.Put(ctx, key, value, clientv3.WithLease(lease.ID))
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	_, err = e.client.Put(context.Background(), key, value, clientv3.WithLease(lease.ID))
 	return err
 }
 
 func (e etcd) Del(key string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	_, err := e.client.Delete(ctx, key)
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	_, err := e.client.Delete(context.Background(), key)
 	return err
 }
 
@@ -122,9 +123,9 @@ func (e etcd) Push(prefix string, key string, value string) (bool, error) {
 	if exists, _ := e.Exists(prefix + key); exists {
 		return false, nil
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	_, err := e.client.Put(ctx, prefix+key+uuid.New().String(), value)
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	_, err := e.client.Put(context.Background(), prefix+key+uuid.New().String(), value)
 	return true, err
 }
 
@@ -161,15 +162,15 @@ func (e etcd) Pop(prefix string) (msg []byte, err error) {
 
 func (e etcd) KeepAlive(exitCtx context.Context, key string, value string, second int64, exit chan<- error) {
 	lease := clientv3.NewLease(e.client)
-	ctx1, cancel1 := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel1()
-	leaseRsp, err := e.client.Grant(ctx1, second)
+	//ctx1, cancel1 := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel1()
+	leaseRsp, err := e.client.Grant(context.Background(), second)
 	if err != nil {
 		exit <- err
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
-	_, err = e.client.Put(ctx, key, value, clientv3.WithLease(leaseRsp.ID))
+	//ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	//defer cancel()
+	_, err = e.client.Put(context.Background(), key, value, clientv3.WithLease(leaseRsp.ID))
 	if err != nil {
 		exit <- err
 	}

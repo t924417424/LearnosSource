@@ -35,7 +35,7 @@ func (m *NodeStatus) KeepExists() chan error {
 	exit := make(chan error, 1)
 	ctx, cancel := context.WithCancel(m.ctx)
 	go func() {
-		queue.MClient.KeepAlive(m.ctx, key, mem, 10, exit)
+		queue.MClient.KeepAlive(m.ctx, key, mem, 30, exit)
 		select {
 		case <-ctx.Done():
 			cancel()

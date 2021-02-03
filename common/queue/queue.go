@@ -20,7 +20,7 @@ func newQueue() cache.Cache {
 		log.Fatal(err.Error())
 	}
 	conf := config.GetConf()
-	c, err := etcd.NewCache(etcd.Addr(conf.Etcd.Addr), etcd.TimeOut(5*time.Second), etcd.Auth(conf.Etcd.UserName, conf.Etcd.PassWord))
+	c, err := etcd.NewCache(etcd.Addr(conf.Etcd.Addr), etcd.TimeOut(15*time.Second), etcd.Auth(conf.Etcd.UserName, conf.Etcd.PassWord))
 	if err != nil {
 		log.Fatal(err.Error())
 	}
