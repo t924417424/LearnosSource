@@ -38,7 +38,7 @@ func (c *createInfo) getImageList() (list []*gateway.ImageList, err error) {
 	if err != nil {
 		return list, errors.New("数据库连接失败！")
 	}
-	defer db.DB.Close()
+	//defer db.DB.Close()
 	var listInfo []model.Image
 	result := db.DB.Model(model.Image{}).Find(&listInfo)
 	if result.Error != nil || result.RowsAffected == 0 {
@@ -95,7 +95,7 @@ func (c *createInfo) createContainer() (string, error) {
 	if err != nil {
 		return "", errors.New("数据库连接失败！")
 	}
-	defer db.DB.Close()
+	//defer db.DB.Close()
 	var imageInfo model.Image
 	imageInfo.ID = uint(c.ImageID)
 	result := db.DB.Where(imageInfo).First(&imageInfo)

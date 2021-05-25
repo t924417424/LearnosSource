@@ -62,7 +62,7 @@ func (u *Info) Registry() error {
 	if err != nil {
 		return errors.New("数据库连接失败！")
 	}
-	defer db.DB.Close()
+	//defer db.DB.Close()
 	var count int
 	check := db.DB.Model(model.User{}).Where(model.User{Username: u.UserName}).Count(&count)
 	if check.Error != nil {
@@ -93,7 +93,7 @@ func (u *Info) UserLogin() (token string, err error) {
 	if err != nil {
 		return token, errors.New("数据库连接失败！")
 	}
-	defer db.DB.Close()
+	//defer db.DB.Close()
 	var userModel model.User
 	result := db.DB.Model(model.User{}).Where(model.User{Username: u.UserName, Password: util2.Md5(u.Password)}).First(&userModel)
 	if result.RowsAffected != 1 {
@@ -154,7 +154,7 @@ func (u *Info) CheckPhone() error {
 	if err != nil {
 		return errors.New("数据库连接失败！")
 	}
-	defer db.DB.Close()
+	//defer db.DB.Close()
 	var count int
 	result := db.DB.Model(&model.User{}).Where(model.User{Phone: u.Phone}).Count(&count)
 	if result.Error != nil {
