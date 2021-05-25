@@ -93,6 +93,7 @@ func (u *Info) UserLogin() (token string, err error) {
 	if err != nil {
 		return token, errors.New("数据库连接失败！")
 	}
+	defer db.Close()
 	var userModel model.User
 	result := db.DB.Model(model.User{}).Where(model.User{Username: u.UserName, Password: util2.Md5(u.Password)}).First(&userModel)
 	if result.RowsAffected != 1 {
