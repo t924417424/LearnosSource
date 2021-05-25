@@ -48,7 +48,7 @@ func (s *sqlPool) put(db *gorm.DB) {
 	//}
 	//s.Lock()
 	//defer s.Unlock()
-	_ = db.Close()
+	//_ = db.Close()
 	//if len(s.db) < cap(s.db) {
 	//	s.db = append(s.db, db)
 	//} else {

@@ -24,6 +24,8 @@ func newDb() *gorm.DB {
 	conf := config.GetConf()
 	//db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", "docker", "eA2pyJ6BHDy53yz5", "127.0.0.1", 3306, "docker"))
 	db, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=True&loc=Local", conf.GateWay.Mysql.UserName, conf.GateWay.Mysql.PassWord, conf.GateWay.Mysql.Addr, conf.GateWay.Mysql.Port, conf.GateWay.Mysql.DbName))
+	db.DB().SetMaxIdleConns(10)
+	db.DB().SetMaxOpenConns(100)
 	if err != nil {
 		log.Printf("db open err :%s", err.Error())
 		return nil
