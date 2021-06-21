@@ -1,6 +1,6 @@
 [common]
 jwtKey = "ss_jwt_token"          #jwt签发加密秘钥
-PublicNetWorkMode = false		#是否开启公网模式 true|false 说明：false:只可以部署在局域网  true:只可以部署在非局域网
+PublicNetWorkMode = false		#是否开启公网模式 true|false 说明：false:只可以部署在局域网  true:只可以部署在跨局域网的公网环境
 
 [webSocket]				    #此配置三个服务需要保护一致
 [webSocket.gateWay]		    #gateway节点的websocket服务端口
