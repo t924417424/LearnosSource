@@ -1,4 +1,8 @@
 # Learn开源项目简介
+![](https://img.shields.io/github/license/t924417424/LearnosSource)
+![](https://img.shields.io/github/stars/t924417424/LearnosSource)
+![](https://img.shields.io/github/forks/t924417424/LearnosSource)
+![](https://img.shields.io/github/issues/t924417424/LearnosSource)
 
 [在线体验](https://learnos.online "在线体验")
 
