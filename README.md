@@ -151,3 +151,13 @@ dbName   = "gateway_data"
 ---
 - 联系邮箱：924417424@qq.com
 - 如有问题可以向我反馈，也可以自行尝试修复
+
+### 赞助商
+
+- 感谢[JetBrains](https://jb.gg/OpenSource)对本项目的支持！
+<br/>
+<p align="center">
+    <a href="https://jb.gg/OpenSource">
+        <img border="0" src="https://img.mukewang.com/5e3967430001f8e120001668.png" width="200"/>
+    </a>
+</p>
